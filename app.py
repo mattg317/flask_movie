@@ -1,9 +1,12 @@
 from flask import Flask 
 from flask_sqlalchemy import SQLAlchemy
+from flask import request, render_template, redirect, url_for
 
 
+# Make sure to delete password before commiting to github
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:XXXX@localhost/flaskmovie'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:XXX@localhost/flaskmovie'
+app.debug = True
 db =SQLAlchemy(app)
 
 class User(db.Model):
@@ -20,7 +23,15 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-	return "<h1>hello flask</h1>"
+	return render_template('add_user.html')
+
+@app.route('/post_user', methods=['POST'])
+def post_user():
+	user = User(request.form['username'], request.form["email"])
+	db.session.add(user)
+	db.session.commit()
+	return redirect(url_for('/'))
+	
 
 if __name__ == "__main__":
 	app.run()
