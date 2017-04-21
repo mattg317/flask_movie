@@ -5,7 +5,7 @@ from flask import request, render_template, redirect, url_for
 
 # Make sure to delete password before commiting to github
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:XXX@localhost/flaskmovie'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:XXXX@localhost/flaskmovie'
 app.debug = True
 db =SQLAlchemy(app)
 
@@ -30,7 +30,7 @@ def post_user():
 	user = User(request.form['username'], request.form["email"])
 	db.session.add(user)
 	db.session.commit()
-	return redirect(url_for('/'))
+	return redirect(url_for('index'))
 	
 
 if __name__ == "__main__":
