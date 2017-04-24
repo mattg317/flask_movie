@@ -14,5 +14,11 @@
 		<input type="submit"/>
 
 	</form>
+	
+	{% for user in myUser %}
+		<li>{{user.id}} - {{ user.username }} - {{user.email}}</li>
+	{% endfor %}
+
+	{{oneItem.username}}
 </body>
 </html>
