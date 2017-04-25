@@ -2,34 +2,49 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, render_template, redirect, url_for
 import key
+from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 
 # Make sure to delete password before commiting to github
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:' + key.key+ '@localhost/flaskmovie'
 app.debug = True
+app.config['SECRET_KEY'] = key.securtiy_key
+app.config['SECURITY_REGISTERABLE'] = True
 db =SQLAlchemy(app)
 
-class User(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(80), unique=True)
-	email = db.Column(db.String(120),  unique=True)
+# Define models
+roles_users = db.Table('roles_users',
+        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
-	def __init__(self, username, email):
-		self.username = username
-		self.email = email
-	
-	def __repr__(self):
-		return '<User %r>' % self.username
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
+
+ # Setup Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
 
 @app.route('/')
 def index():
-	myUser = User.query.all()
-	oneItem = User.query.filter_by(username="test2").first()
-	return render_template('add_user.html', myUser=myUser, oneItem=oneItem)
+	return render_template('add_user.html')
 
-@app.route('/profile/<username>')
-def profile(username):
-	user = User.query.filter_by(username=username).first()
+@app.route('/profile/<email>')
+@login_required
+def profile(email):
+	user = User.query.filter_by(email=email).first()
 	return render_template("profile.html", user=user)
 
 
