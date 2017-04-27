@@ -1,0 +1,19 @@
+==> 2017-04-27 16:46:56 <==
+# cmd: /Users/matthewgiordanella/Documents/projects/flask_movie/env/bin/conda install -n env flask
++defaults::click-6.7-py36_0
++defaults::flask-0.12.1-py36_0
++defaults::itsdangerous-0.24-py36_0
++defaults::jinja2-2.9.6-py36_0
++defaults::markupsafe-0.23-py36_2
++defaults::openssl-1.0.2k-1
++defaults::pip-9.0.1-py36_1
++defaults::python-3.6.1-0
++defaults::readline-6.2-2
++defaults::setuptools-27.2.0-py36_0
++defaults::sqlite-3.13.0-0
++defaults::tk-8.5.18-0
++defaults::werkzeug-0.12.1-py36_0
++defaults::wheel-0.29.0-py36_0
++defaults::xz-5.2.2-1
++defaults::zlib-1.2.8-3
+# install specs: flask
