@@ -1,13 +1,11 @@
-{%  extends "layouts/layout1.html" %}
-
+{% extends "layouts/layout1.html" %}
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 {% include "security/_messages.html" %}
 {% block title %}
-
     Login Page
-
 {% endblock %}
 {% block content %}
+    <div class="container">
         <h1>Login</h1>
         <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
           {{ login_user_form.hidden_tag() }}
@@ -15,8 +13,9 @@
           {{ render_field_with_errors(login_user_form.password) }}
           {{ render_field_with_errors(login_user_form.remember) }}
           {{ render_field(login_user_form.next) }}
-          {{ render_field(login_user_form.submit) }}
+          {{ render_field(login_user_form.submit, class="btn btn-primary") }}
         </form>
-    {% include "security/_menu.html" %}
 
-{% endblock %}
+{% include "security/_menu.html" %}
+    </div>
+{%  endblock %}
